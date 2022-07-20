@@ -16,8 +16,7 @@ function createElement(todo) {
   const divElement = todoElement.querySelector('div.todo');
   if (!divElement) return null;
   if (divElement) {
-    const alertClass =
-      todoElement.dataset.status === 'completed' ? 'alert-success' : 'alert-secondary';
+    const alertClass = todo.status === 'completed' ? 'alert-success' : 'alert-secondary';
     divElement.classList.add(alertClass);
   }
   //TODO: attach event for button
@@ -28,8 +27,8 @@ function createElement(todo) {
       console.log('mark as done button');
       const currentStatus = todoElement.dataset.status;
       todoElement.dataset.status = currentStatus === 'pending' ? 'completed' : 'pending';
-
-      const newAlertClass = currentStatus === 'pending' ? 'alert-secondary' : 'alert-success';
+      const newAlertClass =
+        todoElement.dataset.status === 'pending' ? 'alert-secondary' : 'alert-success';
       divElement.classList.remove('alert-secondary', 'alert-success');
       divElement.classList.add(newAlertClass);
     });
