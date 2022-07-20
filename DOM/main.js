@@ -48,6 +48,7 @@ function createElement(todo) {
     removeButton.addEventListener('click', () => {
       // remove from dom
       const newTodoList = todoList.filter((x) => x.id !== todo.id);
+      console.log(newTodoList);
       localStorage.setItem('todo_list', JSON.stringify(newTodoList));
       todoElement.remove();
     });
@@ -55,6 +56,29 @@ function createElement(todo) {
   //add click event for remove button
   return todoElement;
 }
+
+const handleTodoFormSubmit = (e) => {
+  e.preventDefault();
+
+  const todoForm = document.getElementById('todoFormId');
+  if (!todoForm) return;
+  const todoInput = todoForm.querySelector('input.todo-input');
+  if (!todoInput) return;
+
+  const todoList = getTodoList();
+  const newTodo = {
+    id: Date.now(),
+    title: todoInput.value,
+    status: 'pending',
+  };
+  todoList.push(newTodo);
+  // save to local storage
+  localStorage.setItem('todo_list', JSON.stringify(todoList));
+
+  const newTodoItem = createElement(newTodo);
+  const ulElement = document.getElementById('todo-list');
+  ulElement.appendChild(newTodoItem);
+};
 
 function getTodoList() {
   try {
@@ -76,4 +100,9 @@ function renderUlElement(todoList, ulElementId) {
 (() => {
   const todoList = getTodoList();
   renderUlElement(todoList, 'todo-list');
+  // register submit
+  const todoForm = document.getElementById('todoFormId');
+  if (todoForm) {
+    todoForm.addEventListener('submit', handleTodoFormSubmit);
+  }
 })();
