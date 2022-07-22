@@ -70,7 +70,7 @@ function createElement(todo) {
   const checkBoxButton = todoElement.querySelector('input.checkbox');
   if (checkBoxButton) {
     checkBoxButton.checked = isChecked;
-    checkBoxButton.addEventListener('click', () => {
+    checkBoxButton.addEventListener('change', () => {
       const todoList = getTodoList();
       const latestTodo = todoList.find((x) => x.id === todo.id);
       if (!latestTodo) return;
