@@ -29,20 +29,18 @@
 
       <div class="input-group my-3">
         <span class="input-group-text" id="searchTermSpan">Search</span>
-        <input type="text" class="form-control" placeholder="Username" id="searchTerm" aria-label="Username"
+        <input type="text" class="form-control" placeholder="search to do" id="searchTerm" aria-label="Username"
           aria-describedby="searchTermSpan">
       </div>
 
       <div class="input-group my-3">
         <label class="input-group-text" for="inputFilter">Status</label>
         <select class="form-select" id="inputFilter">
-          <option selected>Choose...</option>
-          <option value="all">all</option>
-          <option value="pending">pending</option>
-          <option value="completed">completed</option>
+          <option value="all" selected>ALL</option>
+          <option value="pending">PENDING</option>
+          <option value="completed">COMPLETED</option>
         </select>
       </div>
-
       <ul id="todo-list">
       </ul>
     </div>

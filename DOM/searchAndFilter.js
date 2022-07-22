@@ -2,31 +2,31 @@ function getAllTodoElement() {
   return document.querySelectorAll('#todo-list > li');
 }
 
-function isMatch(liElement, searchTerm) {
-  if (!liElement) return;
-  if (searchTerm == '') return true;
+function isMatchStatus(liElement, filterStatus) {
+  return filterStatus === 'all' || liElement.dataset.status === filterStatus;
+}
 
+function isMatchSearch(liElement, searchTerm) {
   const titleElement = liElement.querySelector('p.todo__title');
-  if (!titleElement) return false;
-
   return titleElement.textContent.toLowerCase().includes(searchTerm.toLowerCase());
 }
 
-function searchTodo(searchTerm) {
-  const todoElementList = getAllTodoElement();
-  if (!todoElementList || todoElementList.length === 0) return;
-  for (const todoElement of todoElementList) {
-    const needToShow = isMatch(todoElement, searchTerm);
-
-    todoElement.hidden = !needToShow;
-  }
+function isMatch(liElement, params) {
+  return (
+    isMatchSearch(liElement, params?.get('searchTerm')) &&
+    isMatchStatus(liElement, params?.get('status'))
+  );
 }
 
-function filterInput(filterInput) {
+function handleFilterChange(filterName, filterValue) {
+  const url = new URL(window.location);
+  url.searchParams.set(filterName, filterValue);
+  window.history.pushState({}, '', url);
+
   const todoElementList = getAllTodoElement();
-  if (!todoElementList || todoElementList.length === 0) return;
+
   for (const todoElement of todoElementList) {
-    const needToShow = filterInput === 'all' || todoElement.dataset.status === filterInput;
+    const needToShow = isMatch(todoElement, url.searchParams);
     todoElement.hidden = !needToShow;
   }
 }
@@ -35,22 +35,20 @@ function initSearchInput() {
   // find search input
   const searchInput = document.getElementById('searchTerm');
   if (!searchInput) return;
-
   searchInput.addEventListener('input', () => {
-    console.log('input', searchInput.value);
-    searchTodo(searchInput.value);
+    handleFilterChange('searchTerm', searchInput.value);
   });
 }
 
-function initFilterInput() {
+function initFilterStatus() {
   const inputFilter = document.getElementById('inputFilter');
   if (!inputFilter) return;
   inputFilter.addEventListener('change', () => {
-    filterInput(inputFilter.value);
+    handleFilterChange('status', inputFilter.value);
   });
 }
 
 (() => {
   initSearchInput();
-  initFilterInput();
+  initFilterStatus();
 })();
